@@ -1,0 +1,47 @@
+##
+GET http://localhost:4004/odata/v4/customer/Redemptions
+
+###
+GET http://localhost:4004/odata/v4/customer/Customers
+
+###
+POST http://localhost:4004/odata/v4/customer/Customers
+Content-Type: application/json
+
+{
+    "name":"Bob",
+    "email":"bob@gmail.com",
+    "totalPoints": 0,
+    "tier": "Bronze"
+}
+
+###
+POST http://localhost:4004/odata/v4/customer/Transactions
+Content-Type: application/json
+
+{
+    "customer_customerID": "a7c5749b-8fc6-4857-8ccb-76f5b6ad7760",
+    "channel": "Online",
+    "amount": "1000"
+}
+###
+POST http://localhost:4004/odata/v4/customer/Transactions
+Content-Type: application/json
+
+{
+    "customer_customerID": "a7c5749b-8fc6-4857-8ccb-76f5b6ad7760",
+    "channel": "Store",
+    "amount": "1000"
+}
+
+
+###
+POST http://localhost:4004/odata/v4/customer/Redemptions
+Content-Type: application/json
+
+{
+    "customer_customerID": "a7c5749b-8fc6-4857-8ccb-76f5b6ad7760",
+    "pointsUsed": 200,
+    "remarks": "Discount Coupon"
+}
+

@@ -1,0 +1,5 @@
+{
+    "mdk.platform": "iOS & Android & Web",
+    "SAP HANA Project Explorer.bind.confirm existing service": false,
+    "SAP HANA Project Explorer.bind.confirm automatic undeployment": false
+}

@@ -1,0 +1,210 @@
+{
+  "_version": "1.86.0",
+  "sap.app": {
+    "id": "customui",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:ovp",
+      "version": "1.30.0",
+      "toolsId": "c2d5377a-a4f8-4df4-b2ed-db564c6fc3ae"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v2/customer/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "2.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "Overview-display": {
+          "semanticObject": "Overview",
+          "action": "display",
+          "title": "Loyalty Dashboard",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      },
+      "outbounds": {
+        "navToTransactions": {
+          "semanticObject": "Transactions",
+          "action": "manage",
+          "target": {
+            "type": "URL",
+            "uri": "/tranasactionui/index.html"
+          }
+        },
+        "navToCustomers": {
+          "semanticObject": "Customers",
+          "action": "manage",
+          "target": {
+            "type": "URL",
+            "uri": "/customersui/index.html"
+          }
+        },
+        "navToRedemptions": {
+          "semanticObject": "Redemptions",
+          "action": "manage",
+          "target": {
+            "type": "URL",
+            "uri": "/redemptionsui/index.html"
+          }
+        },
+        "navToPolicies": {
+          "semanticObject": "RewardPolicies",
+          "action": "manage",
+          "target": {
+            "type": "URL",
+            "uri": "/policiesui/index.html"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.151.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {},
+        "sap.ovp": {},
+        "sap.ui.rta": {},
+        "sap.ui.layout": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "customui.i18n.i18n"
+        }
+      },
+      "mainModel": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+        "useBatch": true,
+        "defaultBindingMode": "TwoWay",
+        "defaultCountMode": "Inline"
+      }
+     },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [],
+      "targets": {}
+    }
+  },
+  "sap.ovp": {
+    "globalFilterModel": "mainModel",
+    "globalFilterEntitySet": "Customers",
+    "containerLayout": "resizable",
+    "enableLiveFilter": true,
+    "considerAnalyticalParameters": false,
+    "cards": {
+      "RecentTransactionsCard": {
+        "model": "mainModel",
+        "template": "sap.ovp.cards.list",
+        "settings": {
+          "title": "Recent Transactions",
+          "subTitle": "Latest activity",
+          "entitySet": "Transactions",
+          "listType": "condensed",
+          "annotationPath": "com.sap.vocabularies.UI.v1.LineItem#OVPTransactions",
+          "identificationAnnotationPath": "com.sap.vocabularies.UI.v1.Identification#NavToTransactions"
+        }
+      },
+      "CustomersCard": {
+        "model": "mainModel",
+        "template": "sap.ovp.cards.list",
+        "settings": {
+          "title": "Top Customers",
+          "subTitle": "Loyalty Members",
+          "entitySet": "Customers",
+          "listType": "condensed",
+          "annotationPath": "com.sap.vocabularies.UI.v1.LineItem#OVPCustomers",
+          "identificationAnnotationPath": "com.sap.vocabularies.UI.v1.Identification#NavToCustomers"
+        }
+      },
+      "RedemptionsCard": {
+        "model": "mainModel",
+        "template": "sap.ovp.cards.list",
+        "settings": {
+          "title": "Recent Redemptions",
+          "subTitle": "Points used",
+          "entitySet": "Redemptions",
+          "listType": "condensed",
+          "annotationPath": "com.sap.vocabularies.UI.v1.LineItem#OVPRedemptions",
+          "identificationAnnotationPath": "com.sap.vocabularies.UI.v1.Identification#NavToRedemptions"
+        }
+      },
+      "PoliciesCard": {
+        "model": "mainModel",
+        "template": "sap.ovp.cards.list",
+        "settings": {
+          "title": "Reward Policies",
+          "subTitle": "Active Rules",
+          "entitySet": "RewardPolicies",
+          "listType": "condensed",
+          "annotationPath": "com.sap.vocabularies.UI.v1.LineItem#OVPPolicies",
+          "identificationAnnotationPath": "com.sap.vocabularies.UI.v1.Identification#NavToPolicies"
+        }
+      }
+    },
+    "globalFilterControlType": "MacroFilterBar"
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "analytical"
+  },
+  "sap.fe": {
+    "app": {
+      "enableLazyLoading": true
+    }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "Customer_Loyalty.service"
+  }
+}

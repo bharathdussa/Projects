@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Loyalty Portal</title>
+
+    <style>
+        :root {
+            --sapBrandColor: #0a6ed1;
+            --sapBackgroundColor: #f7f7f7;
+            --sapTextColor: #32363a;
+            --sapCardBg: #ffffff;
+            --sapBorderColor: #d9d9d9;
+        }
+
+        body {
+            font-family: "72", Arial, Helvetica, sans-serif;
+            background-color: var(--sapBackgroundColor);
+            color: var(--sapTextColor);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--sapCardBg);
+            border-bottom: 1px solid var(--sapBorderColor);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.25rem;
+            color: var(--sapBrandColor);
+        }
+
+        /* Persona Switcher */
+        .persona-bar {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .persona-btn {
+            background: #e5f2ff;
+            border: 1px solid #bce0fd;
+            color: var(--sapBrandColor);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .persona-btn.active {
+            background: var(--sapBrandColor);
+            color: white;
+            border-color: var(--sapBrandColor);
+        }
+
+        .persona-btn:hover {
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .welcome-banner {
+            background: linear-gradient(135deg, #0a6ed1, #188038);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .welcome-banner h2 {
+            margin-top: 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--sapCardBg);
+            border: 1px solid var(--sapBorderColor);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: var(--sapBrandColor);
+        }
+
+        .card p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--sapBrandColor);
+            color: white;
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            background-color: #0055b3;
+        }
+
+        .restricted {
+            background: #e0e0e0 !important;
+            color: #666 !important;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+
+        <h1>💎 Customer Loyalty & Rewards Management</h1>
+
+        <div class="persona-bar">
+
+            <span style="font-size: 0.9rem; font-weight: bold; color: #555;">
+                Switch Persona:
+            </span>
+
+            <button
+                class="persona-btn active"
+                id="btn-Admin"
+                onclick="switchPersona('Admin')">
+                👑 Admin
+            </button>
+
+            <button
+                class="persona-btn"
+                id="btn-Staff"
+                onclick="switchPersona('Staff')">
+                💼 Retail Staff
+            </button>
+
+            <button
+                class="persona-btn"
+                id="btn-Customer"
+                onclick="switchPersona('Customer')">
+                👤 Customer
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <div class="container">
+
+        <div class="welcome-banner">
+
+            <h2 id="greeting">
+                Welcome, Admin!
+            </h2>
+
+            <p id="roleDescription">
+                You have full system access to manage customer profiles,
+                process transactions, issue redemptions, and configure
+                reward policies.
+            </p>
+
+        </div>
+
+
+        <h2>Fiori Applications</h2>
+
+        <div class="grid" id="appGrid">
+            <!-- Fiori application cards are generated dynamically -->
+        </div>
+
+    </div>
+
+
+    <script>
+
+        /*
+         * Available Fiori Applications
+         */
+        const apps = [
+
+            {
+                title: "👥 Manage Customers",
+                desc: "View, create, and edit customer profiles, tier statuses, and reward points.",
+                url: "/customersui/index.html",
+                allowedRoles: ["Admin", "Staff", "Customer"]
+            },
+
+            {
+                title: "💳 Manage Transactions",
+                desc: "Track purchase history, point accruals, and tier updates across retail stores.",
+                url: "/tranasactionui/index.html",
+                allowedRoles: ["Admin", "Staff"]
+            },
+
+            {
+                title: "🎁 Manage Redemptions",
+                desc: "Process point redemptions, vouchers, and reward claims.",
+                url: "/redemptionsui/index.html",
+                allowedRoles: ["Admin", "Customer"]
+            },
+
+            {
+                title: "⚙️ Reward Policies",
+                desc: "Configure tier thresholds and point calculation rules.",
+                url: "/policiesui/index.html",
+                allowedRoles: ["Admin"]
+            }
+
+        ];
+
+
+        // Current active persona
+        let currentPersona = "Admin";
+
+
+        /*
+         * Switch Persona
+         */
+        function switchPersona(persona) {
+
+            currentPersona = persona;
+
+            // Update active button
+            document
+                .querySelectorAll(".persona-btn")
+                .forEach(btn => btn.classList.remove("active"));
+
+            document
+                .getElementById(`btn-${persona}`)
+                .classList.add("active");
+
+
+            // Update welcome message
+            const greeting =
+                document.getElementById("greeting");
+
+            const description =
+                document.getElementById("roleDescription");
+
+
+            if (persona === "Admin") {
+
+                greeting.innerText =
+                    "Welcome, System Administrator!";
+
+                description.innerText =
+                    "You have full system access to manage customer profiles, process daily transactions, handle redemptions, and configure reward policies.";
+
+            }
+
+            else if (persona === "Staff") {
+
+                greeting.innerText =
+                    "Welcome, Retail Staff Member!";
+
+                description.innerText =
+                    "You can view and manage customer accounts, process daily transactions, and handle customer redemptions.";
+
+            }
+
+            else if (persona === "Customer") {
+
+                greeting.innerText =
+                    "Welcome, Valued Customer!";
+
+                description.innerText =
+                    "Access your customer profile and view your loyalty transactions and reward redemption options.";
+
+            }
+
+
+            // Refresh application cards
+            renderDashboard();
+
+        }
+
+
+        /*
+         * Render Fiori Application Cards
+         */
+        function renderDashboard() {
+
+            const grid =
+                document.getElementById("appGrid");
+
+            grid.innerHTML = "";
+
+
+            apps.forEach(app => {
+
+                const hasAccess =
+                    app.allowedRoles.includes(currentPersona);
+
+
+                const card =
+                    document.createElement("div");
+
+                card.className = "card";
+
+
+                // Blue border for accessible apps
+                // Red border for restricted apps
+                card.style.borderLeft =
+                    hasAccess
+                        ? "4px solid var(--sapBrandColor)"
+                        : "4px solid #cc0000";
+
+
+                let actionButton =
+                    `<a href="${app.url}" class="btn">
+                        Launch Application
+                    </a>`;
+
+
+                if (!hasAccess) {
+
+                    actionButton =
+                        `<span class="btn restricted">
+                            Access Restricted
+                        </span>`;
+
+                }
+
+
+                card.innerHTML = `
+
+                    <div>
+
+                        <h3>
+                            ${app.title}
+                        </h3>
+
+                        <p>
+                            ${app.desc}
+                        </p>
+
+                    </div>
+
+                    ${actionButton}
+
+                `;
+
+
+                grid.appendChild(card);
+
+            });
+
+        }
+
+
+        // Initial page load
+        renderDashboard();
+
+    </script>
+
+</body>
+</html>
